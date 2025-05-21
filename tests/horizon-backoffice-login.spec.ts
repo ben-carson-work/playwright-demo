@@ -1,46 +1,50 @@
-import { test, expect } from '@playwright/test';
+import { test as baseTest, expect } from '@playwright/test';
+import { HorizonBackOfficeLoginPage } from '../src/pages/HorizonBackOfficeLoginPage';
+import { HorizonBackOfficeDashboardPage } from '../src/pages/HorizonBackOfficeDashboardPage';
 
-// This test logs in to the Horizon BackOffice web application and verifies successful login
-
-test('User can log in to Horizon BackOffice with admin credentials', async ({ page }) => {
-  // Step 1: Go to the login page
-  await page.goto('http://localhost8080/SNP-WIP/admin');
-
-  // Step 2: Fill in username and password
-  await page.fill('#uid', process.env.ADMIN_USERNAME || '');
-  await page.fill('#pwd', process.env.ADMIN_PASSWORD || '');
-
-  // Step 3: Click the login button
-  await page.click('#login-button');
-
-  // Step 4: Wait for the top bar to contain the expected string
-  await expect(page.locator('text=WIP - Local Test Environment')).toBeVisible();
-
-  // Optionally, pause for debugging
-  // await page.pause();
+// Extend base 'test' with our custom fixtures
+const test = baseTest.extend<{
+  loginPage: HorizonBackOfficeLoginPage;
+  dashboardPage: HorizonBackOfficeDashboardPage;
+}>({
+  loginPage: async ({ page }, use) => {
+    await use(new HorizonBackOfficeLoginPage(page));
+  },
+  dashboardPage: async ({ page }, use) => {
+    await use(new HorizonBackOfficeDashboardPage(page));
+  },
 });
 
-test('Admin can log out from Horizon BackOffice and return to login screen', async ({ page }) => {
-  // Step 1: Go to the login page
-  await page.goto('http://localhost8080/SNP-WIP/admin');
+// Reading baseURL from the config, will be automatically used by page.goto() if path starts with '/'
+// or can be explicitly passed if needed.
+// const baseURL = test.info().project.use.baseURL; // Not directly needed if POM handles navigation well
 
-  // Step 2: Fill in username and password
-  await page.fill('#uid', process.env.ADMIN_USERNAME || '');
-  await page.fill('#pwd', process.env.ADMIN_PASSWORD || '');
+test.beforeEach(async ({ loginPage }) => {
+  // Common setup: Go to the login page before each test in this file
+  // The HorizonBackOfficeLoginPage.goto() method can take an optional path or use a default.
+  // It will use the baseURL from playwright.config.ts
+  await loginPage.goto();
+});
 
-  // Step 3: Click the login button
-  await page.click('#login-button');
+test('User can log in to Horizon BackOffice with admin credentials', async ({ loginPage, dashboardPage }) => {
+  // Credentials should be sourced from .env file (ADMIN_USERNAME, ADMIN_PASSWORD)
+  // The login method in POM will use them by default.
+  await loginPage.login(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
 
-  // Step 4: Validate the dashboard appears
-  await expect(page.locator('text=WIP - Local Test Environment')).toBeVisible();
+  // Verify successful login by checking for a welcome message on the dashboard
+  await dashboardPage.expectWelcomeMessageToBeVisible('WIP - Local Test Environment');
+});
 
-  // Step 5: Open the dropdown menu in the upper right
-  await page.click('#topmenu-user');
+test('Admin can log out from Horizon BackOffice and return to login screen', async ({ loginPage, dashboardPage }) => {
+  // Login first
+  await loginPage.login(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
 
-  // Step 6: Click the "Logout" link
-  await page.click('text=Logout');
+  // Validate the dashboard appears
+  await dashboardPage.expectWelcomeMessageToBeVisible('WIP - Local Test Environment');
 
-  // Step 7: Validate that the login screen is shown again
-  await expect(page.locator('#login-button')).toBeVisible();
-  await expect(page.locator('#uid')).toBeVisible();
+  // Logout
+  await dashboardPage.logout();
+
+  // Validate that the login screen is shown again
+  await loginPage.expectLoginButtonToBeVisible();
 });
