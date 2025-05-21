@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc && chmod 755 build/index.js",
     "start": "node build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,8 @@
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.20",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "dotenv": "^16.4.5"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",
