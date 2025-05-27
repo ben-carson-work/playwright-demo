@@ -1,7 +1,6 @@
 # Node
 node_modules/
 dist/
-build/
 
 # Environment variables
 .env
@@ -48,6 +47,8 @@ coverage/
 
 # Test results
 /test-results/
+playwright-report/
+playwright/.cache/
 
 # Misc
 *.tgz
