@@ -31,6 +31,7 @@ This project demonstrates a setup for running Playwright tests, showcasing integ
 2.  **Install dependencies:**
     ```bash
     npm install
+    npm install dotenv --save-dev && npm install @types/dotenv --save-dev
     ```
 
 3.  **Install Playwright browsers:**

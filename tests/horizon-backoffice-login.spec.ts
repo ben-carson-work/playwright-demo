@@ -1,6 +1,6 @@
 import { test as baseTest, expect } from '@playwright/test';
-import { HorizonBackOfficeLoginPage } from '../src/pages/HorizonBackOfficeLoginPage';
-import { HorizonBackOfficeDashboardPage } from '../src/pages/HorizonBackOfficeDashboardPage';
+import { HorizonBackOfficeLoginPage } from '../src/pages/HorizonBackOfficeLoginPage.js';
+import { HorizonBackOfficeDashboardPage } from '../src/pages/HorizonBackOfficeDashboardPage.js';
 
 // Extend base 'test' with our custom fixtures
 const test = baseTest.extend<{

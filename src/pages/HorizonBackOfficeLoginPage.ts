@@ -5,7 +5,7 @@ export class HorizonBackOfficeLoginPage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
-  readonly errorMessage: Locator; // Optional: if there's an error message element
+  readonly errorMessage: Locator | undefined; // Optional: if there's an error message element
 
   constructor(page: Page) {
     this.page = page;

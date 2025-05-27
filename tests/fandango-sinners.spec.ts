@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { FandangoPage } from '../src/pages/FandangoPage'; // Adjusted path
+import { FandangoPage } from '../src/pages/FandangoPage.js'; // Adjusted path
 
 test('Verify "Sinners" is playing in theaters near 29407 on Fandango', async ({ page }) => {
   const fandangoPage = new FandangoPage(page);
