@@ -12,10 +12,6 @@ on:
         # Expecting one of: chromium, chrome, chrome-beta, msedge, msedge-beta, msedge-dev, firefox, webkit
         default: 'chromium'
         required: false
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 jobs:
   test:
     timeout-minutes: 15
