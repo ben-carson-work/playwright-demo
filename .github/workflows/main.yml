@@ -1,3 +1,5 @@
+name: Playwright MCP Tests CI
+
 on:
   push:
     branches: [ main ]
