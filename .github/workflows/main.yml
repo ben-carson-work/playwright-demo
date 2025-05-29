@@ -1,6 +1,16 @@
 name: Playwright MCP Tests CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      environmentname:
+        description: 'Environment'
+        default: 'dev'
+        required: true
+      browsername:
+        description: 'Choose Browser'
+        default: 'chromium'
+        required: true
   push:
     branches: [ main ]
   pull_request:
@@ -18,5 +28,5 @@ jobs:
 
       - name: Run multi-line script
         run: 
-          echo Additional line being printed
-          echo Third line being printed
+          echo "You requested running ${{ github.event.inputs.environmentname }} tests"
+          echo "Inside the ${{ github.event.inputs.browsername }} browser"
